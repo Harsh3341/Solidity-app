@@ -1,8 +1,23 @@
+import {
+  Navbar,
+  Welcome,
+  Footer,
+  Loader,
+  Services,
+  Transactions,
+} from "./components";
+
 const App = () => {
   return (
     <>
-      <div className="text-3xl underline">
-        <h1>App</h1>
+      <div className="min-h-screen">
+        <div className="gradient-bg-welcome">
+          <Navbar />
+          <Welcome />
+        </div>
+        <Services />
+        <Transactions />
+        <Footer />
       </div>
     </>
   );
