@@ -21,6 +21,8 @@ const getEthereumContract = () => {
     signer,
     transactionContract,
   });
+
+  return transactionContract;
 };
 
 export const TransactionsProvider = ({ children }) => {
@@ -67,6 +69,8 @@ export const TransactionsProvider = ({ children }) => {
       );
 
       console.log(availableTransactions);
+
+      setTransactions(structuredTransactions);
     } catch (error) {}
   };
 
@@ -92,14 +96,21 @@ export const TransactionsProvider = ({ children }) => {
 
   const checkIfTransactionsExist = async () => {
     try {
-      const transactionContract = getEthereumContract();
-      const transactionCount = await transactionContract.getTransactionCount();
+      if (ethereum) {
+        const transactionsContract = getEthereumContract();
 
-      window.localStorage.setItem("transactionCount", transactionCount);
+        const currentTransactionCount =
+          await transactionsContract.getTransactionsCount();
+
+        window.localStorage.setItem(
+          "transactionCount",
+          currentTransactionCount
+        );
+      }
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object found");
+      throw new Error("No ethereum object");
     }
   };
 
@@ -152,7 +163,7 @@ export const TransactionsProvider = ({ children }) => {
       setIsLoading(false);
       console.log(`Success... ${transactionHash.hash}`);
 
-      const transactionCount = await transactionContract.getTransactionCount();
+      const transactionCount = await transactionContract.getTransactionsCount();
 
       setTransactionCount(transactionCount.toNumber());
     } catch (error) {
